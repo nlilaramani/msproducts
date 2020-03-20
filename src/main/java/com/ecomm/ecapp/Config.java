@@ -6,6 +6,7 @@
 package com.ecomm.ecapp;
 
 import com.ecomm.ecapp.service.InventoryService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -34,10 +35,14 @@ public class Config {
         container.addMessageListener(messageListener(), topic()); 
         return container; 
     }
+    @Value("${redisurl}")
+    private String redisUrl;
+    @Value("${redisport}")
+    private int redisPort;
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
 
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", 6379));
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisUrl, redisPort));
     }
     @Bean
     ChannelTopic topic() {
